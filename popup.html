@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Focus Guard</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <div class="header">
+      <div class="logo">🎯</div>
+      <h1>Focus Guard</h1>
+    </div>
+    
+    <div class="toggle-section">
+      <div class="toggle-label">
+        <span class="status-text">Extension Status</span>
+        <span class="status-badge" id="statusBadge">Active</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="toggleEnabled" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    
+    <div class="stats-section">
+      <h2>Today's Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-card blocked">
+          <div class="stat-icon">🚫</div>
+          <div class="stat-number" id="blockedCount">0</div>
+          <div class="stat-label">Videos Blocked</div>
+        </div>
+        <div class="stat-card allowed">
+          <div class="stat-icon">✅</div>
+          <div class="stat-number" id="allowedCount">0</div>
+          <div class="stat-label">Videos Allowed</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="info-section">
+      <p class="info-text">
+        <strong>💡 How it works:</strong><br>
+        This extension monitors YouTube videos and only allows educational content related to programming, web development, AI, and tech entrepreneurship.
+      </p>
+    </div>
+    
+    <div class="action-section">
+      <button id="resetStats" class="btn btn-secondary">Reset Statistics</button>
+      <a href="https://www.youtube.com" target="_blank" class="btn btn-primary">Go to YouTube</a>
+    </div>
+    
+    <div class="footer">
+      <p>Stay focused, keep learning! 🚀</p>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
