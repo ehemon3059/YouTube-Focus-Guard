@@ -96,6 +96,123 @@ youtube-focus-guard/
 ├── styles.css             # Content script styles (for overlay)
 │
 ├── icons/                 # Extension icons
+
+
+
+graph TB
+    subgraph "Client Layer"
+        WEB[Customer Booking Web]
+        ADMIN[Admin Dashboard]
+        STAFF[Staff Mobile Web]
+    end
+
+    subgraph "CDN & Edge"
+        CDN[CloudFlare CDN]
+        WAF[Web Application Firewall]
+    end
+
+    subgraph "API Gateway Layer"
+        KONG[Kong API Gateway]
+        RATELIMIT[Rate Limiter]
+    end
+
+    subgraph "Microservices"
+        AUTH[Auth Service]
+        CORE[Core Service<br/>Bookings + Services + Staff]
+        INV[Inventory Service]
+        PAY[Payment Service]
+        NOTIF[Notification Service]
+        ANALYTICS[Analytics Service]
+        AI[AI / Recommendation Service]
+    end
+
+    subgraph "Data Layer"
+        PGPRIMARY[(PostgreSQL Primary)]
+        PGREPLICA[(PostgreSQL Replicas)]
+        REDIS[(Redis Cluster)]
+        S3[S3 Object Storage]
+    end
+
+    subgraph "Message & Jobs"
+        RABBITMQ[RabbitMQ Cluster]
+        BULLMQ[BullMQ Workers]
+    end
+
+    subgraph "External Services"
+        STRIPE[Stripe / Paddle]
+        WHATSAPP[WhatsApp Business API]
+        SMS[Twilio SMS]
+        EMAIL[SendGrid]
+        CALENDAR[Google Calendar API]
+    end
+
+    subgraph "Observability"
+        PROM[Prometheus]
+        GRAFANA[Grafana]
+        ELK[ELK Stack]
+        SENTRY[Sentry]
+    end
+
+    %% Client → Edge → Gateway
+    WEB --> CDN
+    ADMIN --> CDN
+    STAFF --> CDN
+    CDN --> WAF
+    WAF --> KONG
+    KONG --> RATELIMIT
+
+    %% Gateway → Microservices
+    RATELIMIT --> AUTH
+    RATELIMIT --> CORE
+    RATELIMIT --> INV
+    RATELIMIT --> PAY
+    RATELIMIT --> NOTIF
+    RATELIMIT --> ANALYTICS
+    RATELIMIT --> AI
+
+    %% Microservices → Data Stores
+    AUTH --> PGPRIMARY
+    CORE --> PGPRIMARY
+    INV --> PGPRIMARY
+    PAY --> PGPRIMARY
+    ANALYTICS --> PGREPLICA
+
+    AUTH --> REDIS
+    CORE --> REDIS
+    PAY --> REDIS
+
+    CORE --> RABBITMQ
+    INV --> RABBITMQ
+    PAY --> RABBITMQ
+    NOTIF --> RABBITMQ
+
+    RABBITMQ --> BULLMQ
+
+    %% External Integrations
+    PAY --> STRIPE
+    NOTIF --> WHATSAPP
+    NOTIF --> SMS
+    NOTIF --> EMAIL
+    CORE --> CALENDAR
+
+    AUTH --> S3
+    ADMIN --> S3
+
+    %% Observability (metrics & logs)
+    AUTH -.-> PROM
+    CORE -.-> PROM
+    INV -.-> PROM
+    PAY -.-> PROM
+    PROM --> GRAFANA
+
+    AUTH -.-> ELK
+    CORE -.-> ELK
+    INV -.-> ELK
+    PAY -.-> ELK
+
+    AUTH -.-> SENTRY
+    CORE -.-> SENTRY
+
 │   ├── icon16.png
 │   ├── icon48.png
 │   └── icon128.png
